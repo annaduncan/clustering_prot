@@ -1705,7 +1705,6 @@ def process_clusters(network, f_index, f_nb):
 					else:
 						dist_p_pp_matrix = MDAnalysis.analysis.distances.distance_array(np.asarray(pp_res_cog), np.asarray(p_res_cog), box_dim)
 					proteins_ctcts_res[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)][dist_p_pp_matrix < args.res_contact] += 1
-					print 'Anna debug: np.sum(proteins_ctcts_res[{},{}]) is:'.format(min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)), np.sum(proteins_ctcts_res[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)])
 					if c_size not in proteins_ctcts_res_size[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)].keys():
 						if p_s_index < pp_s_index:
 							proteins_ctcts_res_size[p_s_index, pp_s_index][c_size] = np.zeros((proteins_length[p_specie], proteins_length[pp_specie]))
@@ -1895,14 +1894,12 @@ def process_clusters_TM(network, f_index, box_dim, f_nb):
 						else:
 							dist_p_pp_matrix = MDAnalysis.analysis.distances.distance_array(np.asarray(pp_res_cog), np.asarray(p_res_cog), box_dim)
 						proteins_ctcts_res[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)][dist_p_pp_matrix < args.res_contact] += 1
-						print 'Anna debug: np.sum(proteins_ctcts_res[{},{}]) is:'.format(min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)), np.sum(proteins_ctcts_res[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)])
 						if c_size not in proteins_ctcts_res_size[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)].keys():
 							if p_s_index < pp_s_index:
 								proteins_ctcts_res_size[p_s_index, pp_s_index][c_size] = np.zeros((proteins_length[p_specie], proteins_length[pp_specie]))
 							else:
 								proteins_ctcts_res_size[pp_s_index, p_s_index][c_size] = np.zeros((proteins_length[pp_specie], proteins_length[p_specie]))
 						proteins_ctcts_res_size[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)][c_size][dist_p_pp_matrix < args.res_contact] += 1
-						print 'Anna debug: np.sum(proteins_ctcts_res_size[{},{}][{}]) is:'.format(min(p_s_index, pp_s_index), max(p_s_index, pp_s_index), c_size), np.sum(proteins_ctcts_res_size[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)][c_size])
 						if args.cluster_groups_file != "no":
 							proteins_ctcts_res_group[min(p_s_index, pp_s_index), max(p_s_index, pp_s_index)][groups_sizes_dict[c_size]][dist_p_pp_matrix < args.res_contact] += 1
 						
@@ -2047,7 +2044,6 @@ def process_oligomers():
 	if args.cluster_groups_file != "no":
 		global proteins_ctcts_res_group
 		proteins_ctcts_res_group_new = {}
-	print 'Anna debug: proteins_ctcts_res: ', proteins_ctcts_res
 	#use local variable to calculate new interaction matrix
 	proteins_ctcts_res_new = {}
 	proteins_ctcts_res_size_new = {}
@@ -2137,7 +2133,6 @@ def process_oligomers():
 			
 	#update global interaction matrix
 	proteins_ctcts_res = proteins_ctcts_res_new
-	print 'Anna debug: proteins_ctcts_res after oligomer treatment: ', proteins_ctcts_res
 	proteins_ctcts_res_size = proteins_ctcts_res_size_new
 	if args.cluster_groups_file != "no":
 		proteins_ctcts_res_group = proteins_ctcts_res_group_new
@@ -2208,8 +2203,7 @@ def calculate_statistics():
 	for s_index1 in range(0,nb_species):
 		for s_index2 in range(s_index1, nb_species):
 			if np.sum(proteins_ctcts_res[s_index1,s_index2]) > 0:	
-				print 'Anna debug: np.sum(proteins_ctcts_res[{},{}]) is:'.format(s_index1,s_index2), np.sum(proteins_ctcts_res[s_index1,s_index2])			
-				proteins_ctcts_res[s_index1,s_index2] = proteins_ctcts_res[s_index1,s_index2] / float(np.sum(proteins_ctcts_res[s_index1,s_index2])) * 100		
+				proteins_ctcts_res[s_index1,s_index2] = proteins_ctcts_res[s_index1,s_index2] / float(np.sum(proteins_ctcts_res[s_index1,s_index2])) * 100
 			#by size
 			for c_size in proteins_ctcts_res_size[s_index1,s_index2].keys():
 				if np.sum(proteins_ctcts_res_size[s_index1,s_index2][c_size]) > 0:				
@@ -2634,8 +2628,6 @@ def graph_interactions_residues_2D():
 		s1 = proteins_species[s_index1]
 		for s_index2 in range(s_index1, nb_species):
 			s2 = proteins_species[s_index2]
-			print 'Anna debug: sum is: ', np.sum(proteins_ctcts_res[s_index1,s_index2])
-			print 'Anna debug: if sum > 0, this file is created: ', os.getcwd() + '/' + str(args.output_folder) + '/2_proteins_interactions/2_interactions_residues_' + str(proteins_names[s1]) + '-' + str(proteins_names[s2]) + '_2D.svg'
 			if np.sum(proteins_ctcts_res[s_index1,s_index2]) > 0:
 				#create filename
 				#---------------
